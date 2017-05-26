@@ -1,9 +1,9 @@
 <?php
 /**
- * ThinkFly middleware library
+ * slince middleware library
  * @author Tao <taosikai@yeah.net>
  */
-namespace Think\Middleware;
+namespace Slince\Middleware;
 
 use Interop\Http\ServerMiddleware\MiddlewareInterface;
 use Psr\Http\Message\ServerRequestInterface;

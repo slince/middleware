@@ -1,9 +1,9 @@
 <?php
 /**
- * ThinkFly middleware library
+ * slince middleware library
  * @author Tao <taosikai@yeah.net>
  */
-namespace Think\Middleware\Exception;
+namespace Slince\Middleware\Exception;
 
 class RuntimeException extends \RuntimeException
 {

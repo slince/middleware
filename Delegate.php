@@ -1,27 +1,33 @@
 <?php
 /**
- * ThinkFly middleware library
+ * slince middleware library
  * @author Tao <taosikai@yeah.net>
  */
-namespace Think\Middleware;
+namespace Slince\Middleware;
 
 use Interop\Http\ServerMiddleware\DelegateInterface;
+use Interop\Http\ServerMiddleware\MiddlewareInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 class Delegate implements DelegateInterface
 {
     /**
-     * @var MiddlewareQueue
+     * @var MiddlewareInterface
      */
-    protected $middlewares;
+    protected $middleware;
 
-    public function __construct(MiddlewareQueue $middlewares)
+    /**
+     * @var DelegateInterface
+     */
+    protected $delegate;
+
+    public function __construct(MiddlewareInterface $middleware)
     {
-        $this->middlewares = clone $middlewares;
+        $this->middleware = $middleware;
     }
 
     public function process(ServerRequestInterface $request)
     {
-        $this->middlewares->pop()->process($request, new Delegate($this->middlewares));
+        $this->middleware->process($request, $this->delegate);
     }
 }

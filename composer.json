@@ -1,0 +1,24 @@
+{
+    "name": "slince/middleware",
+    "description": "A flexible PSR15 middleware dispatcher",
+    "keywords": ["middleware", "psr-15", "dispatcher"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Tao",
+            "email": "taosikai@yeah.net"
+        }
+    ],
+    "require": {
+        "php": ">=5.6.0",
+        "http-interop/http-middleware": "^0.4"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.0|^6.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Slince\\Middleware\\": ""
+        }
+    }
+}

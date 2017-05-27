@@ -1,4 +1,4 @@
-﻿# Mddleware Dispatcher
+﻿# Middleware Dispatcher
 
 [![Build Status](https://img.shields.io/travis/slince/middleware/master.svg?style=flat-square)](https://travis-ci.org/slince/middleware)
 [![Coverage Status](https://img.shields.io/codecov/c/github/slince/middleware.svg?style=flat-square)](https://codecov.io/github/slince/middleware)
@@ -29,11 +29,12 @@ var_dump($response instanceof Psr\Http\Message\ResponseInterface);
 
 ### Add middlewares
 
-Add PSR-15 middleware to the queue
+Add PSR-15 middlewares to the queue
 
 ```php
 $queue = new Slince\Middleware\MiddlewareQueue([$middleware1, $middleware2]);
-$queue->push($middleware);
+
+$queue->push($middleware3);
 ```
 
 Or add a callable function directly

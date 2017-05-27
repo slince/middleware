@@ -47,14 +47,15 @@ $queue->push(function(ServerRequestInterface $request, DelegateInterface $delega
 
 ### Dispatch
 
-```
+```php
 try{
     $response = $queue->process(Zend\Diactoros\ServerRequestFactory::fromGlobals());
 } catch (Slince\Middleware\Exception\MissingResponseException $exception) {
     //...
 }
 ```
-An `MissingResponseException` will be thrown if the middleware did not return a invalid response or the queue was exhausted
+
+A `MissingResponseException` will be thrown if the middleware did not return a invalid response or the queue was exhausted
 
 ## License
  

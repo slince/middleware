@@ -26,6 +26,9 @@ class Delegate implements DelegateInterface
         $this->middleware = $middleware;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function process(ServerRequestInterface $request)
     {
         $this->middleware->process($request, $this->delegate);

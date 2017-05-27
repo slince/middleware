@@ -6,10 +6,10 @@
 namespace Slince\Middleware;
 
 use Interop\Http\ServerMiddleware\DelegateInterface;
+use Interop\Http\ServerMiddleware\MiddlewareInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Slince\Middleware\Exception\InvalidArgumentException;
 
-class CallableMiddleware  extends Middleware
+class CallableMiddleware implements MiddlewareInterface
 {
     /**
      * The callback
@@ -17,13 +17,8 @@ class CallableMiddleware  extends Middleware
      */
     protected $callable;
 
-    public function __construct($callback)
+    public function __construct(callable $callback)
     {
-        if (!is_callable($callback)) {
-            throw new InvalidArgumentException(sprintf('The callback is invalid, got type: "%s"',
-                gettype($callback)
-            ));
-        }
         $this->callable = $callback;
     }
 

@@ -5,7 +5,7 @@
 [![Latest Stable Version](https://img.shields.io/packagist/v/slince/middleware.svg?style=flat-square&label=stable)](https://packagist.org/packages/slince/middleware)
 [![Scrutinizer](https://img.shields.io/scrutinizer/g/slince/middleware.svg?style=flat-square)](https://scrutinizer-ci.com/g/slince/middleware/?branch=master)
 
-The package is a PSR-15 middleware dispatcher for PSR-7 request message that help to create middlewares and dispatch.
+The package is a flexible PSR-15 middleware dispatcher for PSR-7 request message that help to create middlewares and dispatch.
 
 ## Installation
 

@@ -21,9 +21,10 @@ class Delegate implements DelegateInterface
      */
     protected $delegate;
 
-    public function __construct(MiddlewareInterface $middleware)
+    public function __construct(MiddlewareInterface $middleware, DelegateInterface $delegate)
     {
         $this->middleware = $middleware;
+        $this->delegate = $delegate;
     }
 
     /**
@@ -31,6 +32,6 @@ class Delegate implements DelegateInterface
      */
     public function process(ServerRequestInterface $request)
     {
-        $this->middleware->process($request, $this->delegate);
+        return $this->middleware->process($request, $this->delegate);
     }
 }

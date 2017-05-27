@@ -7,6 +7,7 @@ namespace Slince\Middleware;
 
 use Interop\Http\ServerMiddleware\MiddlewareInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\ResponseInterface;
 use Slince\Middleware\Exception\MissingResponseException;
 
 class MiddlewareQueue
@@ -16,10 +17,10 @@ class MiddlewareQueue
      */
     public $middlewares;
 
-    public function __construct(array $middlewares = [])
+    public function __construct($middlewares = [])
     {
         $this->middlewares = new \SplQueue();
-        foreach ($middlewares as $middleware) {
+        foreach ((array)$middlewares as $middleware) {
             $this->push($middleware);
         }
     }
@@ -36,17 +37,41 @@ class MiddlewareQueue
         $this->middlewares->enqueue($middleware);
     }
 
-    public function process(ServerRequestInterface $request)
+    /**
+     * Get all middlewares
+     * @return MiddlewareInterface[]
+     */
+    public function all()
     {
-        if ($this->middlewares->isEmpty()) {
-            throw new MissingResponseException( 'The queue was exhausted, with no response returned');
+        $middlewares = [];
+        foreach ($this->middlewares as $middleware) {
+            $middlewares[] = $middleware;
         }
-        return $this->generateDelegate()->process($request);
+        return $middlewares;
     }
 
+    /**
+     * Dispatch the request to the middlewares and get psr7 response
+     * @param ServerRequestInterface $request
+     * @throws MissingResponseException
+     * @return ResponseInterface
+     */
+    public function process(ServerRequestInterface $request)
+    {
+        $response = $this->generateDelegate()->process($request);
+        if (!$response instanceof ResponseInterface) {
+            throw new MissingResponseException('Last middleware executed did not return a response.');
+        }
+        return $response;
+    }
+
+    /**
+     * @return Delegate
+     */
     protected function generateDelegate()
     {
-        return new Delegate($this->middlewares->dequeue(), $this->generateDelegate());
+        return new Delegate($this->middlewares->dequeue(), $this->middlewares->isEmpty()
+            ? new FinalDelegate() : $this->generateDelegate());
     }
 
     protected static function decorateCallableMiddleware(callable $middleware)

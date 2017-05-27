@@ -48,7 +48,7 @@ $queue->push(function(ServerRequestInterface $request, DelegateInterface $delega
 ### Dispatch
 
 ```php
-try{
+try {
     $response = $queue->process(Zend\Diactoros\ServerRequestFactory::fromGlobals());
 } catch (Slince\Middleware\Exception\MissingResponseException $exception) {
     //...

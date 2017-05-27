@@ -1,4 +1,4 @@
-﻿# Mddleware dispatcher
+﻿# Mddleware Dispatcher
 
 [![Build Status](https://img.shields.io/travis/slince/middleware/master.svg?style=flat-square)](https://travis-ci.org/slince/middleware)
 [![Coverage Status](https://img.shields.io/codecov/c/github/slince/middleware.svg?style=flat-square)](https://codecov.io/github/slince/middleware)

@@ -1,37 +1,36 @@
 <?php
-/**
- * slince middleware library
- * @author Tao <taosikai@yeah.net>
+/*
+ * This file is part of the slince/middleware package.
+ *
+ * (c) Slince <taosikai@yeah.net>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
+
 namespace Slince\Middleware;
 
-use Interop\Http\ServerMiddleware\DelegateInterface;
-use Interop\Http\ServerMiddleware\MiddlewareInterface;
+use Interop\Http\Server\RequestHandlerInterface;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class Delegate implements DelegateInterface
+class Delegate implements RequestHandlerInterface
 {
     /**
-     * @var MiddlewareInterface
+     * @var callable
      */
-    protected $middleware;
+    protected $callback;
 
-    /**
-     * @var DelegateInterface
-     */
-    protected $delegate;
-
-    public function __construct(MiddlewareInterface $middleware, DelegateInterface $delegate)
+    public function __construct(callable $callback)
     {
-        $this->middleware = $middleware;
-        $this->delegate = $delegate;
+        $this->callback = $callback;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function process(ServerRequestInterface $request)
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        return $this->middleware->process($request, $this->delegate);
+        return call_user_func($this->callback, $request);
     }
 }

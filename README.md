@@ -18,7 +18,7 @@ composer require slince/middleware
 ## Quick example
 
 ```php
-$queue =  new Slince\Middleware\MiddlewareQueue([$middleware1, $middleware2]);
+$queue =  new Slince\Middleware\Dispatcher([$middleware1, $middleware2]);
 
 $response = $queue->process(Zend\Diactoros\ServerRequestFactory::fromGlobals());
 
@@ -27,21 +27,34 @@ var_dump($response instanceof Psr\Http\Message\ResponseInterface);
 
 ## Usage
 
-### Add middlewares
+### Add middleware
 
 Add PSR-15 middlewares to the queue
 
 ```php
-$queue = new Slince\Middleware\MiddlewareQueue([$middleware1, $middleware2]);
+use Psr\Http\Message\ServerRequestInterface;
+use Interop\Http\Server\MiddlewareInterface;
+use Interop\Http\Server\RequestHandlerInterface;
+use Zend\Diactoros\Response;
 
-$queue->push($middleware3);
+class MyMiddleware implements MiddlewareInteface
+{
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $next) 
+    {
+        $response = new Response();
+        $response->getBody()->write('hello world');
+        return $response;
+    }
+}
+$dispatcher = new Slince\Middleware\Dispatcher([
+    new MyMiddleware()
+]);
 ```
-
 Or add a callable function directly
 
 ```php
-$queue->push(function(ServerRequestInterface $request, DelegateInterface $delegate){
-    $delegate->process($request);
+$queue->push(function(ServerRequestInterface $request, RequestHandlerInterface $next){
+    return $delegate->process($request);
 });
 ```
 
@@ -49,7 +62,7 @@ $queue->push(function(ServerRequestInterface $request, DelegateInterface $delega
 
 ```php
 try {
-    $response = $queue->process(Zend\Diactoros\ServerRequestFactory::fromGlobals());
+    $response = $dispatcher->process(Zend\Diactoros\ServerRequestFactory::fromGlobals());
 } catch (Slince\Middleware\Exception\MissingResponseException $exception) {
     //...
 }

@@ -1,11 +1,15 @@
 <?php
-/**
- * slince middleware library
- * @author Tao <taosikai@yeah.net>
+/*
+ * This file is part of the slince/middleware package.
+ *
+ * (c) Slince <taosikai@yeah.net>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
+
 namespace Slince\Middleware\Exception;
 
-class MissingResponseException extends RuntimeException
+class MissingResponseException extends \RuntimeException
 {
-
 }

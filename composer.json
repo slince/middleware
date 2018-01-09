@@ -1,7 +1,7 @@
 {
     "name": "slince/middleware",
     "description": "A flexible PSR15 middleware dispatcher",
-    "keywords": ["middleware", "psr-15", "dispatcher"],
+    "keywords": ["middleware", "psr-15", "psr-7", "middleware-dispatcher", "middlewares", "http"],
     "license": "MIT",
     "authors": [
         {

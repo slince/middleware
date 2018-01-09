@@ -18,9 +18,9 @@ composer require slince/middleware
 ## Quick example
 
 ```php
-$queue =  new Slince\Middleware\Dispatcher([$middleware1, $middleware2]);
+$dispatcher = new Slince\Middleware\Dispatcher([$middleware1, $middleware2]);
 
-$response = $queue->process(Zend\Diactoros\ServerRequestFactory::fromGlobals());
+$response = $dispatcher->process(Zend\Diactoros\ServerRequestFactory::fromGlobals());
 
 var_dump($response instanceof Psr\Http\Message\ResponseInterface);
 ```
@@ -53,7 +53,7 @@ $dispatcher = new Slince\Middleware\Dispatcher([
 Or add a callable function directly
 
 ```php
-$queue->push(function(ServerRequestInterface $request, RequestHandlerInterface $next){
+$dispatcher->push(function(ServerRequestInterface $request, RequestHandlerInterface $next){
     return $delegate->process($request);
 });
 ```

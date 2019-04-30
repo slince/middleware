@@ -13,7 +13,7 @@ class DispatcherTest extends TestCase
 {
     public function testConstructor()
     {
-        $middlewareFoo = new CallableMiddleware(function(ServerRequestInterface $request, RequestHandlerInterface $next){
+        $middlewareFoo = new CallableMiddleware(function (ServerRequestInterface $request, RequestHandlerInterface $next) {
             return $next->handle($request);
         });
         $queue = new Dispatcher([$middlewareFoo]);
@@ -22,10 +22,10 @@ class DispatcherTest extends TestCase
 
     public function testPush()
     {
-        $middlewareFoo = new CallableMiddleware(function(ServerRequestInterface $request, RequestHandlerInterface $next){
+        $middlewareFoo = new CallableMiddleware(function (ServerRequestInterface $request, RequestHandlerInterface $next) {
             return $next->handle($request);
         });
-        $middlewareBar = new CallableMiddleware(function(ServerRequestInterface $request, RequestHandlerInterface $next){
+        $middlewareBar = new CallableMiddleware(function (ServerRequestInterface $request, RequestHandlerInterface $next) {
             return $next->handle($request);
         });
         $queue = new Dispatcher();
@@ -38,7 +38,7 @@ class DispatcherTest extends TestCase
     public function testPushCallable()
     {
         $queue = new Dispatcher();
-        $queue->push(function(ServerRequestInterface $request, RequestHandlerInterface $next){
+        $queue->push(function (ServerRequestInterface $request, RequestHandlerInterface $next) {
             return $next->handle($request);
         });
         $this->assertCount(1, $queue->all());
@@ -47,33 +47,33 @@ class DispatcherTest extends TestCase
 
     public function testProcess()
     {
-        $middlewareFoo = new CallableMiddleware(function(ServerRequestInterface $request, RequestHandlerInterface $next){
+        $middlewareFoo = new CallableMiddleware(function (ServerRequestInterface $request, RequestHandlerInterface $next) {
             $response = new Response();
             $response->getBody()->write('foo');
             return $response;
         });
         $queue = new Dispatcher([$middlewareFoo]);
-        $response = $queue->process(ServerRequestFactory::fromGlobals());
+        $response = $queue->handle(ServerRequestFactory::fromGlobals());
         $this->assertInstanceOf(ResponseInterface::class, $response);
     }
 
     public function testInvalidResponseReturned()
     {
-        $middlewareFoo = new CallableMiddleware(function(ServerRequestInterface $request, RequestHandlerInterface $next){
+        $middlewareFoo = new CallableMiddleware(function (ServerRequestInterface $request, RequestHandlerInterface $next) {
             return 'foo';
         });
         $queue = new Dispatcher($middlewareFoo);
         $this->expectException(\TypeError::class);
-        $queue->process(ServerRequestFactory::fromGlobals());
+        $queue->handle(ServerRequestFactory::fromGlobals());
     }
 
     public function testQueueExhausted()
     {
-        $middlewareFoo = new CallableMiddleware(function(ServerRequestInterface $request, RequestHandlerInterface $next){
+        $middlewareFoo = new CallableMiddleware(function (ServerRequestInterface $request, RequestHandlerInterface $next) {
             return $next->handle($request);
         });
         $queue = new Dispatcher([$middlewareFoo]);
         $this->expectException(MissingResponseException::class);
-        $queue->process(ServerRequestFactory::fromGlobals());
+        $queue->handle(ServerRequestFactory::fromGlobals());
     }
 }

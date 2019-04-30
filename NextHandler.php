@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the slince/middleware package.
  *
@@ -14,7 +15,7 @@ use Interop\Http\Server\RequestHandlerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class Delegate implements RequestHandlerInterface
+class NextHandler implements RequestHandlerInterface
 {
     /**
      * @var callable

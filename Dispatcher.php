@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the slince/middleware package.
  *
@@ -16,7 +17,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Slince\Middleware\Exception\MissingResponseException;
 
-class Dispatcher
+class Dispatcher implements RequestHandlerInterface
 {
     /**
      * @var \SplQueue
@@ -68,9 +69,9 @@ class Dispatcher
      *
      * @return ResponseInterface
      */
-    public function process(ServerRequestInterface $request): ResponseInterface
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $response = $this->resolve()->handle($request);
+        $response = $this->getNextHandler()->handle($request);
         if (!$response instanceof ResponseInterface) {
             throw new MissingResponseException('Last middleware executed did not return a response.');
         }
@@ -79,22 +80,32 @@ class Dispatcher
     }
 
     /**
-     * @return Delegate
+     * Dispatch the request to the middlewares and get psr7 response.
+     * @param ServerRequestInterface $request
+     * @return ResponseInterface
+     * @deprecated Use handle($request)
      */
-    protected function resolve(): RequestHandlerInterface
+    public function process(ServerRequestInterface $request): ResponseInterface
     {
-        return new Delegate(function($request){
-            if (!$this->middlewares->isEmpty()) {
-                $middleware = $this->middlewares->dequeue();
-                $response = $middleware->process($request, $this->resolve());
-                if (!$response instanceof ResponseInterface) {
-                    throw new MissingResponseException(sprintf('Unexpected middleware result: %s', gettype($response)));
-                }
+        return $this->handle($request);
+    }
 
-                return $response;
-            } else {
-                throw new MissingResponseException( 'The queue was exhausted, with no response returned');
+    /**
+     * @return NextHandler
+     */
+    protected function getNextHandler(): RequestHandlerInterface
+    {
+        return new NextHandler(function ($request) {
+            if ($this->middlewares->isEmpty()) {
+                throw new MissingResponseException('The queue was exhausted, with no response returned');
             }
+            $middleware = $this->middlewares->dequeue();
+            $response = $middleware->process($request, $this->getNextHandler());
+            if (!$response instanceof ResponseInterface) {
+                throw new MissingResponseException(sprintf('Unexpected middleware result: %s', gettype($response)));
+            }
+
+            return $response;
         });
     }
 

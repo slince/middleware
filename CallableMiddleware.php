@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the slince/middleware package.
  *
@@ -32,8 +33,8 @@ class CallableMiddleware implements MiddlewareInterface
     /**
      * {@inheritdoc}
      */
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $delegate): ResponseInterface
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        return call_user_func($this->callable, $request, $delegate);
+        return call_user_func($this->callable, $request, $handler);
     }
 }

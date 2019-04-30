@@ -5,11 +5,11 @@ use PHPUnit\Framework\TestCase;
 use Zend\Diactoros\Response;
 use Zend\Diactoros\ServerRequestFactory;
 
-class DelegateTest extends TestCase
+class NextHandlerTest extends TestCase
 {
     public function testInstance()
     {
-        $delegate = new Delegate(function($request){
+        $delegate = new NextHandler(function ($request) {
             $response = new Response();
             $response->getBody()->write('hello');
             return $response;

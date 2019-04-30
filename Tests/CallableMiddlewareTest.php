@@ -11,7 +11,7 @@ class CallableMiddlewareTest extends TestCase
 {
     public function testInstance()
     {
-        $middleware = new CallableMiddleware(function(ServerRequestInterface $request, RequestHandlerInterface $delegate){
+        $middleware = new CallableMiddleware(function (ServerRequestInterface $request, RequestHandlerInterface $delegate) {
             $delegate->handle($request);
         });
         $this->assertInstanceOf(MiddlewareInterface::class, $middleware);
